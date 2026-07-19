@@ -66,6 +66,7 @@ final class ComponentRegistry
             'modal'       => Components\Modal::class,
             'toast'       => Components\Toast::class,
 
+            'crud-table' => Data\CrudTable::class,
             'pagination' => Data\Pagination::class,
             'table'      => Data\Table::class,
 

@@ -9,7 +9,14 @@ defined('ABSPATH') || exit;
 /**
  * $args:
  *   columns   array   [['key' => 'name', 'label' => 'Name', 'format' => ?callable], …]
- *   rows      array   List of assoc arrays keyed by column 'key'
+ *   rows      array   List of assoc arrays keyed by column 'key'. A row may
+ *                      include a reserved '_attrs' key — [attr => value] —
+ *                      rendered on that row's <tr> (e.g. data-* attributes
+ *                      a host's own JS reads for client-side sort/search
+ *                      against the real value, not a column's formatted
+ *                      display). '_attrs' itself is never treated as a
+ *                      column, regardless of whether a column happens to
+ *                      share that key.
  *   size      string  'sm'|'md'|'lg'  Row density (default: 'md')
  *   striped   bool    Alternating row background
  *   bordered  bool    Full cell grid instead of horizontal rules only
@@ -68,7 +75,9 @@ final class Table extends Component
                 return sprintf('<td>%s</td>', $this->cell($value, $col['format'] ?? null));
             }, $columns));
 
-            return sprintf('<tr>%s</tr>', $cells);
+            $row_attrs = !empty($row['_attrs']) ? ' ' . $this->attributes($row['_attrs']) : '';
+
+            return sprintf('<tr%s>%s</tr>', $row_attrs, $cells);
         }, $rows));
 
         return sprintf(

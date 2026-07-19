@@ -200,52 +200,17 @@
 	padding: var(--hk-space-5);
 }
 
-.hk-demo-toolbar {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
-	gap: var(--hk-space-3);
-	margin-bottom: var(--hk-space-4);
-}
-
-.hk-demo-toolbar-search {
-	min-width: 16rem;
-}
-
-.hk-demo-toolbar-filter {
-	min-width: 10rem;
-}
-
-.hk-demo-toolbar-spacer {
-	flex: 1;
-}
-
-.hk-demo-footer {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	gap: var(--hk-space-2);
-	margin-top: var(--hk-space-3);
-}
-
-.hk-demo-range-label {
-	margin: 0;
-}
-
-.hk-demo-cell-media {
-	display: flex;
-	align-items: center;
-	gap: var(--hk-space-3);
-}
-
-.hk-demo-cell-strong {
-	font-weight: 500;
-}
-
-.hk-demo-actions {
-	display: flex;
-	gap: var(--hk-space-1);
+/* CrudTable now carries its own card frame (border/padding/shadow) so a
+   real host gets it without relying on this Showcase-only wrapper — but
+   that means a CrudTable rendered inside this wrapper would otherwise be
+   double-boxed (this row's own border/padding, plus CrudTable's). Strip
+   CrudTable's own frame here since this wrapper already provides it. */
+.hk-gallery-preview-row--block .hk-crud-table {
+	padding: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	background: none;
 }
 
 /* Visual aid for the Container gallery so the width difference between

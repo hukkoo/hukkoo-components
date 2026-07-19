@@ -7,6 +7,7 @@ use Hukkoo\Components\Components\Button;
 use Hukkoo\Components\Components\IconButton;
 use Hukkoo\Components\Components\Modal;
 use Hukkoo\Components\Components\Toast;
+use Hukkoo\Components\Data\CrudTable;
 use Hukkoo\Components\Data\Pagination;
 use Hukkoo\Components\Data\Table;
 use Hukkoo\Components\Forms\Number;
@@ -86,6 +87,7 @@ final class TableGallery implements GalleryInterface
                 ]),
                 self::full_demo_section(),
                 self::full_demo_products_section(),
+                self::crud_table_section(),
             ],
             ApiReference::fromReflection(Table::class)
         );
@@ -328,16 +330,16 @@ final class TableGallery implements GalleryInterface
         $toast = (new Toast(['id' => 'hkdemo-toast']))->render();
 
         $body = sprintf(
-            '<div class="hk-demo-toolbar">'
-                . '<div class="hk-demo-toolbar-search">%s</div>'
-                . '<div class="hk-demo-toolbar-filter">%s</div>'
-                . '<div class="hk-demo-toolbar-spacer"></div>'
+            '<div class="hk-table-toolbar">'
+                . '<div class="hk-table-toolbar-search">%s</div>'
+                . '<div class="hk-table-toolbar-filter">%s</div>'
+                . '<div class="hk-table-toolbar-spacer"></div>'
                 . '%s'
                 . '%s'
             . '</div>'
             . '%s'
-            . '<div class="hk-demo-footer">'
-                . '<p class="hk-field-description hk-demo-range-label" id="hkdemo-range-label">%s</p>'
+            . '<div class="hk-table-footer">'
+                . '<p class="hk-field-description hk-table-footer-label" id="hkdemo-range-label">%s</p>'
                 . '<div id="hkdemo-pagination">%s</div>'
             . '</div>'
             . '%s%s%s',
@@ -413,8 +415,8 @@ PHP;
         $initials = mb_strtoupper(mb_substr($parts[0], 0, 1) . mb_substr($parts[1] ?? '', 0, 1));
 
         return Html::raw(sprintf(
-            '<div class="hk-demo-cell-media">'
-                . '<span class="hk-avatar">%s</span><span class="hk-demo-cell-strong">%s</span>'
+            '<div class="hk-table-cell-media">'
+                . '<span class="hk-avatar">%s</span><span class="hk-table-cell-strong">%s</span>'
             . '</div>',
             esc_html($initials),
             esc_html($name)
@@ -458,7 +460,7 @@ PHP;
             ],
         ]))->render();
 
-        return Html::raw(sprintf('<div class="hk-demo-actions">%s%s</div>', $edit, $delete));
+        return Html::raw(sprintf('<div class="hk-table-actions">%s%s</div>', $edit, $delete));
     }
 
     /**
@@ -560,16 +562,16 @@ PHP;
         $toast = (new Toast(['id' => 'hkproddemo-toast']))->render();
 
         $body = sprintf(
-            '<div class="hk-demo-toolbar">'
-                . '<div class="hk-demo-toolbar-search">%s</div>'
-                . '<div class="hk-demo-toolbar-filter">%s</div>'
-                . '<div class="hk-demo-toolbar-spacer"></div>'
+            '<div class="hk-table-toolbar">'
+                . '<div class="hk-table-toolbar-search">%s</div>'
+                . '<div class="hk-table-toolbar-filter">%s</div>'
+                . '<div class="hk-table-toolbar-spacer"></div>'
                 . '%s'
                 . '%s'
             . '</div>'
             . '%s'
-            . '<div class="hk-demo-footer">'
-                . '<p class="hk-field-description hk-demo-range-label" id="hkproddemo-range-label">%s</p>'
+            . '<div class="hk-table-footer">'
+                . '<p class="hk-field-description hk-table-footer-label" id="hkproddemo-range-label">%s</p>'
                 . '<div id="hkproddemo-pagination">%s</div>'
             . '</div>'
             . '%s%s%s',
@@ -681,7 +683,106 @@ PHP;
             ],
         ]))->render();
 
-        return Html::raw(sprintf('<div class="hk-demo-actions">%s%s</div>', $edit, $delete));
+        return Html::raw(sprintf('<div class="hk-table-actions">%s%s</div>', $edit, $delete));
+    }
+
+    /**
+     * The two sections above build the "Full example" pattern by hand —
+     * Table + Badge + IconButton + Select + Modal + Pagination, plus a
+     * hand-written IIFE for search/sort/pagination/CRUD. `CrudTable`
+     * packages that exact pattern into one component so a host doesn't
+     * have to re-assemble it per screen; see its own gallery page
+     * (Data display → CRUD Table) for the full API reference. This
+     * section exists here too since anyone reaching for "Table" is
+     * likely looking for this pattern and should see the productized
+     * version sitting right next to the hand-built one it replaces.
+     */
+    private static function crud_table_section(): string
+    {
+        $products = self::generate_demo_products(12);
+
+        $html = (new CrudTable([
+            'id'       => 'hktable-crud-products',
+            'numbered' => true,
+            'columns'  => [
+                ['key' => 'name', 'label' => __('Name', 'hukkoo-components'), 'sortable' => true],
+                ['key' => 'sku', 'label' => __('SKU', 'hukkoo-components'), 'sortable' => true],
+                [
+                    'key'      => 'price',
+                    'label'    => __('Price', 'hukkoo-components'),
+                    'sortable' => true,
+                    'format'   => [self::class, 'render_price_cell'],
+                ],
+                [
+                    'key'      => 'stock',
+                    'label'    => __('Stock', 'hukkoo-components'),
+                    'sortable' => true,
+                    'format'   => [self::class, 'render_stock_cell'],
+                ],
+            ],
+            'rows'                => $products,
+            'search_placeholder'  => __('Search products…', 'hukkoo-components'),
+            'add_button'          => ['label' => __('Add product', 'hukkoo-components'), 'color' => 'primary'],
+            'view_action'         => static fn (array $row): array => ['label' => __('View', 'hukkoo-components')],
+            'edit_action'         => static fn (array $row): array => ['label' => __('Edit', 'hukkoo-components')],
+            'delete_action'       => static fn (array $row): array => [
+                /* translators: %s: product name */
+                'title'   => sprintf(__('Remove %s?', 'hukkoo-components'), $row['name']),
+                'message' => __("This will permanently remove it from the catalog. This can't be undone.", 'hukkoo-components'),
+                'form'    => Html::raw(''),
+            ],
+        ]))->render();
+
+        $intro = sprintf(
+            '<p class="hk-field-description">%s</p>',
+            esc_html__(
+                'Same search + sortable columns + Add + View/Edit/Delete + pagination pattern as the two examples above — as one component instead of hand-assembled Table/Badge/IconButton/Modal/Pagination markup and a page-specific script.',
+                'hukkoo-components'
+            )
+        );
+
+        $code = <<<'PHP'
+(new CrudTable([
+    'id'       => 'products',
+    'numbered' => true,
+    'columns'  => [
+        ['key' => 'name', 'label' => 'Name', 'sortable' => true],
+        ['key' => 'sku', 'label' => 'SKU', 'sortable' => true],
+        ['key' => 'price', 'label' => 'Price', 'sortable' => true, 'format' => [self::class, 'render_price_cell']],
+        ['key' => 'stock', 'label' => 'Stock', 'sortable' => true, 'format' => [self::class, 'render_stock_cell']],
+    ],
+    'rows'          => $products,
+    'add_button'    => ['label' => 'Add product', 'color' => 'primary', 'url' => '...'],
+    'view_action'   => fn ($row) => ['label' => 'View', 'url' => '...' . $row['id']],
+    'edit_action'   => fn ($row) => ['label' => 'Edit', 'url' => '...' . $row['id']],
+    'delete_action' => fn ($row) => [
+        'title'   => "Remove {$row['name']}?",
+        'message' => "This will permanently remove it from the catalog. This can't be undone.",
+        'form'    => Html::raw('<input type="hidden" name="action" value="delete_product" />' . wp_nonce_field(...)),
+    ],
+]))->render();
+
+// Search, sortable columns and pagination all run client-side — see
+// Data display → CRUD Table for the full API reference.
+PHP;
+
+        return sprintf(
+            '<section class="hk-gallery-section" id="full-example-crud-table">'
+                . '<h3 class="hk-gallery-section-heading"><a href="#full-example-crud-table" class="hk-gallery-section-anchor">%1$s</a></h3>'
+                . '%2$s'
+                . '<div class="hk-gallery-preview-row hk-gallery-preview-row--block">%3$s</div>'
+                . '<button type="button" class="hk-gallery-code-toggle" data-hk-disclosure-toggle="%4$s" '
+                . 'data-hk-label-show="%5$s" data-hk-label-hide="%6$s" aria-expanded="false">%5$s</button>'
+                . '%7$s'
+            . '</section>',
+            esc_html__('Full example — CrudTable component', 'hukkoo-components'),
+            $intro,
+            $html,
+            esc_attr('hk-gallery-code-full-example-crud-table'),
+            esc_attr__('Show code', 'hukkoo-components'),
+            esc_attr__('Hide code', 'hukkoo-components'),
+            CodeBlock::render($code, 'hk-gallery-code-full-example-crud-table')
+        );
     }
 
     private static function full_demo_products_script(): string
@@ -751,11 +852,11 @@ PHP;
 		return ''
 			+ '<tr>'
 			+ '<td><input type="checkbox" class="hk-checkbox hkproddemo-row-check" value="' + p.id + '"></td>'
-			+ '<td class="hk-demo-cell-strong">' + escapeHtml(p.name) + '</td>'
+			+ '<td class="hk-table-cell-strong">' + escapeHtml(p.name) + '</td>'
 			+ '<td>' + escapeHtml(p.sku) + '</td>'
 			+ '<td>' + escapeHtml(formatPrice(p.price)) + '</td>'
 			+ '<td><span class="hk-badge hk-badge--' + stockColor(p.stock) + ' hk-badge--outline"><span class="hk-badge-dot" aria-hidden="true"></span>' + escapeHtml(p.stock) + '</span></td>'
-			+ '<td><div class="hk-demo-actions">'
+			+ '<td><div class="hk-table-actions">'
 			+ '<button type="button" class="hk-button hk-button--square hk-button--ghost hk-button--sm" aria-label="Edit" data-hk-modal-open="hkproddemo-product-modal" onclick="hkproddemoEditProduct(' + p.id + ')">' + iconEdit + '</button>'
 			+ '<button type="button" class="hk-button hk-button--square hk-button--ghost hk-button--error hk-button--sm" aria-label="Delete" data-hk-modal-open="hkproddemo-delete-modal" onclick="hkproddemoAskDelete(' + p.id + ')">' + iconDelete + '</button>'
 			+ '</div></td>'
@@ -1028,13 +1129,13 @@ HTML;
 		return ''
 			+ '<tr>'
 			+ '<td><input type="checkbox" class="hk-checkbox hkdemo-row-check" value="' + m.id + '"></td>'
-			+ '<td><div class="hk-demo-cell-media">'
+			+ '<td><div class="hk-table-cell-media">'
 			+ '<span class="hk-avatar">' + escapeHtml(initials(m.name)) + '</span>'
-			+ '<span class="hk-demo-cell-strong">' + escapeHtml(m.name) + '</span></div></td>'
+			+ '<span class="hk-table-cell-strong">' + escapeHtml(m.name) + '</span></div></td>'
 			+ '<td>' + escapeHtml(m.role) + '</td>'
 			+ '<td>' + escapeHtml(m.email) + '</td>'
 			+ '<td><span class="hk-badge hk-badge--' + statusColor(m.status) + ' hk-badge--outline"><span class="hk-badge-dot" aria-hidden="true"></span>' + escapeHtml(m.status) + '</span></td>'
-			+ '<td><div class="hk-demo-actions">'
+			+ '<td><div class="hk-table-actions">'
 			+ '<button type="button" class="hk-button hk-button--square hk-button--ghost hk-button--sm" aria-label="Edit" data-hk-modal-open="hkdemo-member-modal" onclick="hkdemoEditMember(' + m.id + ')">' + iconEdit + '</button>'
 			+ '<button type="button" class="hk-button hk-button--square hk-button--ghost hk-button--error hk-button--sm" aria-label="Delete" data-hk-modal-open="hkdemo-delete-modal" onclick="hkdemoAskDelete(' + m.id + ')">' + iconDelete + '</button>'
 			+ '</div></td>'

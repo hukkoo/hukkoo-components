@@ -22,6 +22,7 @@ final class Navigation
         'badge'       => 'Data display',
         'card'        => 'Data display',
         'table'       => 'Data display',
+        'crud-table'  => 'Data display',
         'pagination'  => 'Data display',
         'input'       => 'Forms',
         'form'        => 'Forms',

@@ -18,6 +18,16 @@
 	-webkit-font-smoothing: antialiased;
 }
 
+/* WP core's own .wrap only ever adds a small margin, no padding — a real
+   host page built as <div class="wrap hk-page"> (e.g. hukkoo-core's admin
+   screens) otherwise has its h1/notices/content sitting flush against the
+   sidebar edge. Scoped to .wrap specifically rather than bare .hk-page so
+   this doesn't also apply to the Showcase, which lays out its own
+   sidebar/content grid and isn't wrapped in .wrap at all. */
+.wrap.hk-page {
+	padding: var(--hk-space-5);
+}
+
 .hk-page h1,
 .hk-page h2,
 .hk-page h3,
@@ -31,12 +41,24 @@
 	margin: 0 0 var(--hk-space-3);
 }
 
-.hk-page a {
+/* :not(:where(.hk-button)) — a Button rendered as <a> (via its 'url' arg)
+   needs its own color/style rules to win, not this generic link reset.
+   The :where() wrapper matters: :not(X) normally takes on X's own
+   specificity, so a plain :not(.hk-button) would make this whole rule
+   MORE specific than before (it did, briefly — and that regressed other
+   unrelated a-tag rules elsewhere, like the active sidebar nav link
+   losing its white text to this rule's blue, since two rules of equal
+   class-count now lost to this one's extra specificity). :where()
+   always contributes zero specificity regardless of its argument, so
+   :not(:where(.hk-button)) excludes .hk-button exactly as before while
+   leaving this rule's own specificity unchanged from the plain
+   `.hk-page a` it started as. */
+.hk-page a:not(:where(.hk-button)) {
 	color: var(--hk-color-primary);
 	text-decoration: none;
 }
 
-.hk-page a:hover {
+.hk-page a:not(:where(.hk-button)):hover {
 	text-decoration: underline;
 }
 

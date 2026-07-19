@@ -117,7 +117,7 @@ final class IconButtonGallery implements GalleryInterface
         return [
             [
                 'title' => __('Edit / Delete', 'hukkoo-components'),
-                'html'  => sprintf('<div class="hk-demo-actions">%s</div>', $html),
+                'html'  => sprintf('<div class="hk-table-actions">%s</div>', $html),
                 'code'  => <<<'PHP'
 (new IconButton(['icon' => Html::raw($editIcon), 'label' => 'Edit', 'style' => 'ghost', 'size' => 'sm']))->render();
 (new IconButton(['icon' => Html::raw($deleteIcon), 'label' => 'Delete', 'style' => 'ghost', 'color' => 'error', 'size' => 'sm']))->render();

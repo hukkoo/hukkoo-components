@@ -21,6 +21,7 @@
 	font-weight: 500;
 	background: var(--hk-color-surface-alt);
 	color: var(--hk-color-text);
+	text-decoration: none;
 	cursor: pointer;
 	transition: background-color var(--hk-transition-fast), border-color var(--hk-transition-fast),
 		filter var(--hk-transition-fast), transform var(--hk-transition-fast);
@@ -1046,6 +1047,82 @@
 
 .hk-sort-indicator {
 	font-size: 0.9em;
+}
+
+/* ---- Toolbar / footer / cell layout — the toolbar-above,
+   pagination-footer-below shape any real data table ends up needing
+   (search box, filter, an "Add" button; a range label + Pagination).
+   Originally lived only in the Showcase's own stylesheet as demo-only
+   chrome; moved here once a real host (not just the Table gallery's
+   demo) needed the exact same layout. ---- */
+
+.hk-table-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--hk-space-3);
+	margin-bottom: var(--hk-space-4);
+}
+
+.hk-table-toolbar-search {
+	min-width: 16rem;
+}
+
+.hk-table-toolbar-filter {
+	min-width: 10rem;
+}
+
+.hk-table-toolbar-spacer {
+	flex: 1;
+}
+
+.hk-table-footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--hk-space-2);
+	margin-top: var(--hk-space-3);
+}
+
+.hk-table-footer-label {
+	margin: 0;
+}
+
+.hk-table-cell-media {
+	display: flex;
+	align-items: center;
+	gap: var(--hk-space-3);
+}
+
+.hk-table-cell-strong {
+	font-weight: 500;
+}
+
+.hk-table-actions {
+	display: flex;
+	gap: var(--hk-space-1);
+}
+
+/* CrudTable's own card frame — without this, a real host gets the search
+   box and Add button floating directly on its bare page background with
+   only the inner <table> boxed (from .hk-table-wrap), since the padded/
+   bordered look in the Showcase demos comes from Showcase-only wrapper
+   chrome, not from CrudTable itself. The inner .hk-table-wrap's own
+   border/radius/shadow is suppressed here so the two don't nest into a
+   box-in-box. */
+.hk-crud-table {
+	padding: var(--hk-space-5);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-lg);
+	background: var(--hk-color-surface);
+	box-shadow: var(--hk-shadow-sm);
+}
+
+.hk-crud-table .hk-table-wrap {
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
 }
 
 /* Gallery preview rows flex-wrap narrow items (buttons, inputs) side by

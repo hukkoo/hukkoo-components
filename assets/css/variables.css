@@ -103,3 +103,19 @@
 	--hk-color-surface-alt: #0d1117;
 	--hk-color-bg: #0d1117;
 }
+
+/* WordPress admin itself doesn't follow the OS's dark-mode preference —
+   a host page going dark via prefers-color-scheme while the rest of
+   wp-admin around it stays light looks broken, not themed. .hk-page (the
+   wrapper every host is already required to use — see base.css) pins
+   light theme by default for exactly that reason; a host that genuinely
+   wants dark mode still opts in explicitly with data-hk-theme="dark",
+   same as the plain :root case above. */
+.hk-page:not([data-hk-theme="dark"]) {
+	--hk-color-text: #1f2328;
+	--hk-color-text-muted: #59636e;
+	--hk-color-border: #d0d7de;
+	--hk-color-surface: #ffffff;
+	--hk-color-surface-alt: #f6f8fa;
+	--hk-color-bg: #ffffff;
+}

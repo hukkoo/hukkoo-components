@@ -17,6 +17,7 @@ final class Homepage
         'button'      => 'Solid, outline, ghost and link buttons with color, size, shape and loading states.',
         'card'        => 'A simple content container with an optional footer.',
         'container'   => 'A centered, width-constrained wrapper for page content.',
+        'crud-table'  => 'A searchable, sortable table with an Add button and per-row View/Edit/Delete actions.',
         'form'        => 'Wraps a list of fields into a real <form> with a nonce and submit button.',
         'icon-button' => 'A square, icon-only button — reuses Button\'s own color, style and size modifiers.',
         'input'       => 'Text, textarea, number, select and other form field types.',
