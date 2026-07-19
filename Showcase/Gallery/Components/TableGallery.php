@@ -8,6 +8,7 @@ use Hukkoo\Components\Components\IconButton;
 use Hukkoo\Components\Components\Modal;
 use Hukkoo\Components\Components\Toast;
 use Hukkoo\Components\Data\CrudTable;
+use Hukkoo\Components\Data\ListTable;
 use Hukkoo\Components\Data\Pagination;
 use Hukkoo\Components\Data\Table;
 use Hukkoo\Components\Forms\Number;
@@ -88,6 +89,7 @@ final class TableGallery implements GalleryInterface
                 self::full_demo_section(),
                 self::full_demo_products_section(),
                 self::crud_table_section(),
+                self::list_table_section(),
             ],
             ApiReference::fromReflection(Table::class)
         );
@@ -782,6 +784,175 @@ PHP;
             esc_attr__('Show code', 'hukkoo-components'),
             esc_attr__('Hide code', 'hukkoo-components'),
             CodeBlock::render($code, 'hk-gallery-code-full-example-crud-table')
+        );
+    }
+
+    /**
+     * `CrudTable` above is client-side: hand the whole dataset to the
+     * browser once and let JS filter/sort/paginate it. `ListTable` is the
+     * server-driven alternative — every search, column-sort and page
+     * click here is a real navigation (read from $_GET, re-filtered by
+     * plain PHP against this in-memory array, exactly the shape a real
+     * SQL-backed host would take), the same as `hukkoo-core`'s own
+     * per-table records screens. Query args are prefixed hktablelt_ so
+     * they don't collide with this page's own ?tab= routing.
+     */
+    private static function list_table_section(): string
+    {
+        $perPage = 5;
+        $all     = self::generate_demo_products(12);
+
+        $search  = isset($_GET['hktablelt_s']) ? sanitize_text_field(wp_unslash($_GET['hktablelt_s'])) : '';
+        $orderby = isset($_GET['hktablelt_orderby']) ? sanitize_key($_GET['hktablelt_orderby']) : 'id';
+        $order   = isset($_GET['hktablelt_order']) && 'desc' === strtolower((string) $_GET['hktablelt_order']) ? 'DESC' : 'ASC';
+        $page    = max(1, (int) ($_GET['hktablelt_paged'] ?? 1));
+
+        if (!in_array($orderby, ['id', 'name', 'sku', 'price', 'stock'], true)) {
+            $orderby = 'id';
+        }
+
+        $rows = $all;
+        if ('' !== $search) {
+            $needle = strtolower($search);
+            $rows   = array_values(array_filter(
+                $rows,
+                static fn (array $row): bool => false !== strpos(strtolower($row['name']), $needle)
+                    || false !== strpos(strtolower($row['sku']), $needle)
+            ));
+        }
+
+        usort($rows, static function (array $a, array $b) use ($orderby, $order): int {
+            $result = $a[$orderby] <=> $b[$orderby];
+
+            return 'DESC' === $order ? -$result : $result;
+        });
+
+        $total      = count($rows);
+        $totalPages = max(1, (int) ceil($total / $perPage));
+        $page       = min($page, $totalPages);
+        $pageRows   = array_map(
+            static fn (array $row): array => $row + ['_id' => $row['id']],
+            array_slice($rows, ($page - 1) * $perPage, $perPage)
+        );
+
+        $baseUrl = remove_query_arg(['hktablelt_s', 'hktablelt_orderby', 'hktablelt_order', 'hktablelt_paged']);
+
+        $sortUrl = static function (string $key) use ($baseUrl, $orderby, $order, $search): string {
+            $nextOrder = ($key === $orderby && 'ASC' === $order) ? 'desc' : 'asc';
+            $args      = ['hktablelt_orderby' => $key, 'hktablelt_order' => $nextOrder];
+            if ('' !== $search) {
+                $args['hktablelt_s'] = $search;
+            }
+
+            return add_query_arg($args, $baseUrl);
+        };
+
+        $paginationUrl = static function (int $targetPage) use ($baseUrl, $orderby, $order, $search): string {
+            $args = ['hktablelt_paged' => $targetPage, 'hktablelt_orderby' => $orderby, 'hktablelt_order' => strtolower($order)];
+            if ('' !== $search) {
+                $args['hktablelt_s'] = $search;
+            }
+
+            return add_query_arg($args, $baseUrl);
+        };
+
+        $html = (new ListTable([
+            'id'      => 'hktable-list-products',
+            'columns' => [
+                ['key' => 'name', 'label' => __('Name', 'hukkoo-components'), 'sortable' => true],
+                ['key' => 'sku', 'label' => __('SKU', 'hukkoo-components'), 'sortable' => true],
+                [
+                    'key'      => 'price',
+                    'label'    => __('Price', 'hukkoo-components'),
+                    'sortable' => true,
+                    'format'   => [self::class, 'render_price_cell'],
+                ],
+                [
+                    'key'      => 'stock',
+                    'label'    => __('Stock', 'hukkoo-components'),
+                    'sortable' => true,
+                    'format'   => [self::class, 'render_stock_cell'],
+                ],
+            ],
+            'rows'                => $pageRows,
+            'current_sort_key'    => $orderby,
+            'current_sort_dir'    => strtolower($order),
+            'sort_url'            => $sortUrl,
+            'search_value'        => $search,
+            'search_placeholder'  => __('Search products…', 'hukkoo-components'),
+            'search_action'       => $baseUrl,
+            'add_button'          => ['label' => __('Add product', 'hukkoo-components'), 'color' => 'primary'],
+            'edit_action'         => static fn (array $row): array => ['label' => __('Edit', 'hukkoo-components')],
+            'delete_action'       => static fn (array $row): array => [
+                'label'   => __('Delete', 'hukkoo-components'),
+                'url'     => '#',
+                'confirm' => __('Remove this product?', 'hukkoo-components'),
+            ],
+            'bulk_actions'        => ['bulk_delete' => __('Delete', 'hukkoo-components')],
+            'bulk_action_url'     => $baseUrl,
+            'pagination'          => [
+                'current'     => $page,
+                'total_pages' => $totalPages,
+                'url'         => $paginationUrl,
+            ],
+            'total_label'         => sprintf(
+                /* translators: %d: total record count */
+                _n('%d item', '%d items', $total, 'hukkoo-components'),
+                $total
+            ),
+        ]))->render();
+
+        $intro = sprintf(
+            '<p class="hk-field-description">%s</p>',
+            esc_html__(
+                'Same shape as CrudTable above, but server-driven: search, column sort and pagination are real navigations against this dataset (read from $_GET, re-queried with plain PHP) rather than client-side JS — the pattern for a host with its own SQL query behind the table. See Data display → List Table for the full API reference.',
+                'hukkoo-components'
+            )
+        );
+
+        $code = <<<'PHP'
+(new ListTable([
+    'id'               => 'products',
+    'columns'          => [
+        ['key' => 'name', 'label' => 'Name', 'sortable' => true],
+        ['key' => 'sku', 'label' => 'SKU', 'sortable' => true],
+        ['key' => 'price', 'label' => 'Price', 'sortable' => true, 'format' => [self::class, 'render_price_cell']],
+        ['key' => 'stock', 'label' => 'Stock', 'sortable' => true, 'format' => [self::class, 'render_stock_cell']],
+    ],
+    'rows'             => $products,          // already the current page, from a real SQL query
+    'current_sort_key' => $orderby,
+    'current_sort_dir' => strtolower($order),
+    'sort_url'         => fn ($key) => add_query_arg(['orderby' => $key, 'order' => ...], $baseUrl),
+    'search_value'     => $search,
+    'add_button'       => ['label' => 'Add product', 'url' => '...'],
+    'edit_action'      => fn ($row) => ['label' => 'Edit', 'url' => '...' . $row['_id']],
+    'delete_action'    => fn ($row) => ['label' => 'Delete', 'url' => '...', 'confirm' => 'Remove this product?'],
+    'bulk_actions'     => ['bulk_delete' => 'Delete'],
+    'bulk_action_url'  => admin_url('admin-post.php'),
+    'pagination'       => ['current' => $page, 'total_pages' => $totalPages, 'url' => fn ($p) => ...],
+    'total_label'      => "{$total} items",
+]))->render();
+
+// Search, column-sort and pagination all trigger a real page load — see
+// Data display → List Table for the full API reference.
+PHP;
+
+        return sprintf(
+            '<section class="hk-gallery-section" id="full-example-list-table">'
+                . '<h3 class="hk-gallery-section-heading"><a href="#full-example-list-table" class="hk-gallery-section-anchor">%1$s</a></h3>'
+                . '%2$s'
+                . '<div class="hk-gallery-preview-row hk-gallery-preview-row--block">%3$s</div>'
+                . '<button type="button" class="hk-gallery-code-toggle" data-hk-disclosure-toggle="%4$s" '
+                . 'data-hk-label-show="%5$s" data-hk-label-hide="%6$s" aria-expanded="false">%5$s</button>'
+                . '%7$s'
+            . '</section>',
+            esc_html__('Full example — ListTable component', 'hukkoo-components'),
+            $intro,
+            $html,
+            esc_attr('hk-gallery-code-full-example-list-table'),
+            esc_attr__('Show code', 'hukkoo-components'),
+            esc_attr__('Hide code', 'hukkoo-components'),
+            CodeBlock::render($code, 'hk-gallery-code-full-example-list-table')
         );
     }
 

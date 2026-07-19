@@ -67,6 +67,7 @@ final class ComponentRegistry
             'toast'       => Components\Toast::class,
 
             'crud-table' => Data\CrudTable::class,
+            'list-table' => Data\ListTable::class,
             'pagination' => Data\Pagination::class,
             'table'      => Data\Table::class,
 

@@ -23,6 +23,7 @@ final class Navigation
         'card'        => 'Data display',
         'table'       => 'Data display',
         'crud-table'  => 'Data display',
+        'list-table'  => 'Data display',
         'pagination'  => 'Data display',
         'input'       => 'Forms',
         'form'        => 'Forms',

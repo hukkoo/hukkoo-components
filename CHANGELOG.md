@@ -20,6 +20,24 @@ alone never happened to exercise.
 - `Table`: a row may carry a reserved `_attrs` key rendered onto its
   `<tr>` — lets a host's own JS sort/search against a column's real
   value instead of its formatted display (e.g. a Badge).
+- `Data\ListTable` — the server-driven counterpart to `CrudTable`, for a
+  host with its own query layer (real SQL search/sort/LIMIT-OFFSET)
+  instead of a small in-memory dataset: every interaction (search, column
+  sort, pagination) is a real navigation — a link or a GET form — rather
+  than client-side JS re-filtering rows already on the page. Adds a
+  checkbox column with bulk actions (a "Bulk actions" select + Apply,
+  submitting the checked rows to a host-provided endpoint) and per-row
+  Edit/Delete as plain links with a JS `confirm()`, matching how WP's own
+  list tables work. Composes `Table`, `Text`, `Select`, `Button` and the
+  now dual-mode `Pagination`. Registered as `list-table`. `hukkoo-core`'s
+  per-table records screens (`admin.php?page=hukkoo-data-{slug}`), a real
+  `WP_List_Table` subclass previously, are now built on this class —
+  which also surfaced and fixed a pre-existing gap where bulk/single
+  record delete had a working handler that was never actually hooked up.
+- `Pagination`: `url` arg — when set, renders real `<a href>` navigation
+  (the current page and disabled prev/next ends render as an inert
+  `<span>`) instead of `data-hk-page` buttons, for `ListTable` and any
+  other server-driven host where each page is an actual page load.
 
 **Changed**
 - The `hk-demo-toolbar`/`hk-demo-footer`/`hk-demo-cell-*`/`hk-demo-actions`
@@ -27,12 +45,12 @@ alone never happened to exercise.
   `components.css` chain, renamed to `hk-table-*`. They were assumed to
   be Showcase-only demo chrome; the first real host to need the same
   toolbar/footer layout (via `CrudTable`) proved that assumption wrong.
-- `CrudTable` now carries its own card frame (padding, border, shadow)
-  instead of relying on it — the padded/bordered look in the Showcase
-  demos came entirely from Showcase-only wrapper chrome, so on a real
-  host the toolbar and table floated directly on the bare page with no
-  spacing around them. The Showcase now strips its own copy of the same
-  frame from `CrudTable` output to avoid a doubled box.
+- `CrudTable` (and now `ListTable`) carry their own card frame (padding,
+  border, shadow) instead of relying on it — the padded/bordered look in
+  the Showcase demos came entirely from Showcase-only wrapper chrome, so
+  on a real host the toolbar and table floated directly on the bare page
+  with no spacing around them. The Showcase now strips its own copy of
+  the same frame from either component's output to avoid a doubled box.
 - `.wrap.hk-page` (the shape a real host page like `hukkoo-core`'s admin
   screens is built as) now has its own padding — WP core's `.wrap` only
   ever adds a small margin, so a page's heading/notices/content sat
@@ -41,6 +59,33 @@ alone never happened to exercise.
   grid and isn't wrapped in `.wrap`.
 
 **Fixed**
+- `.hk-table-wrap` used `overflow: hidden` to clip the `<table>`'s square
+  corners to the wrapper's rounded ones — but with no `overflow-x`, a
+  table wider than its container (an unbounded host field count, e.g.
+  hukkoo-core's per-table records screens, isn't something this library
+  can size for up front) silently clipped the columns that didn't fit
+  instead of scrolling to them. Split into `overflow-x: auto` (so it
+  scrolls) and `overflow-y: hidden` (still just the corner-clip's job —
+  row count is pagination's responsibility, not a vertical scrollbar
+  here).
+- `.hk-button--outline:hover` hardcoded white text regardless of whether
+  a color variant was set, so a colorless outline `Button` (e.g. the
+  View/Edit row actions `CrudTable`/`ListTable` render) turned white
+  text on a near-white gray hover fill — unreadable. Inconsistent with
+  every other style variant (`--dash`, `--soft`, `--ghost`), which
+  already fall back correctly when no color is set. Added a
+  `--hk-btn-c-on` token (mirroring the existing `--hk-btn-c`/
+  `--hk-btn-c-hover` pair, set alongside them by each `.hk-button--*`
+  color rule) so `--outline`'s hover state can fall back to
+  `--hk-color-text` when no color variant is present, and only use
+  on-color white when one actually is (e.g. Delete's solid-red hover).
+- A solid-color `Button` rendered as `<a>` (via its `url` arg) lost its
+  white text on hover, falling back to WP admin's own `a:hover { color }`
+  rule — its `(0,1,1)` specificity beat the base `.hk-button--primary`'s
+  `(0,1,0)`, and the hover-state color/background rule never re-asserted
+  `color` so it didn't contest it. Nearly unreadable, since the fallback
+  color was close to the button's own hover background. Fixed by setting
+  `color` explicitly in that already-higher-specificity hover rule.
 - `.hk-page a` (the base link-color reset) had higher specificity than
   `.hk-button`'s own color rules, so any `Button` rendered as `<a>` (via
   its `url` arg) lost its intended text color — invisible on solid

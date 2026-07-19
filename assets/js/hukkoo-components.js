@@ -715,4 +715,25 @@
 			if (panel) filterLookupOptions(panel, search.value);
 		}
 	});
+
+	/**
+	 * ListTable's "select all" checkbox — toggles every row checkbox
+	 * inside the same <form> (there may be more than one <form> on the
+	 * page, e.g. the search box's own form sits outside this one).
+	 *
+	 *   <input type="checkbox" data-hk-check-all="my-list">
+	 *   <input type="checkbox" name="record[]" value="1">
+	 */
+	document.addEventListener('change', function (e) {
+		if (!e.target.hasAttribute('data-hk-check-all')) {
+			return;
+		}
+		var form = e.target.closest('form');
+		if (!form) {
+			return;
+		}
+		form.querySelectorAll('input[name="record[]"]').forEach(function (checkbox) {
+			checkbox.checked = e.target.checked;
+		});
+	});
 })();

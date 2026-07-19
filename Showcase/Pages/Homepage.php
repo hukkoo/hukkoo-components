@@ -21,6 +21,7 @@ final class Homepage
         'form'        => 'Wraps a list of fields into a real <form> with a nonce and submit button.',
         'icon-button' => 'A square, icon-only button — reuses Button\'s own color, style and size modifiers.',
         'input'       => 'Text, textarea, number, select and other form field types.',
+        'list-table'  => 'A server-driven, searchable, sortable, bulk-selectable records grid — every interaction is a real navigation.',
         'modal'       => 'A dialog overlay for confirmations and focused tasks, with focus trap and Escape to close.',
         'pagination'  => 'A prev/numbered/next button group, with ellipsis truncation for long page ranges.',
         'table'       => 'Sortable, paginated data tables with row actions.',

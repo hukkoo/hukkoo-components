@@ -200,12 +200,14 @@
 	padding: var(--hk-space-5);
 }
 
-/* CrudTable now carries its own card frame (border/padding/shadow) so a
-   real host gets it without relying on this Showcase-only wrapper — but
-   that means a CrudTable rendered inside this wrapper would otherwise be
-   double-boxed (this row's own border/padding, plus CrudTable's). Strip
-   CrudTable's own frame here since this wrapper already provides it. */
-.hk-gallery-preview-row--block .hk-crud-table {
+/* CrudTable/ListTable now carry their own card frame (border/padding/
+   shadow) so a real host gets it without relying on this Showcase-only
+   wrapper — but that means either one rendered inside this wrapper would
+   otherwise be double-boxed (this row's own border/padding, plus the
+   component's). Strip the component's own frame here since this wrapper
+   already provides it. */
+.hk-gallery-preview-row--block .hk-crud-table,
+.hk-gallery-preview-row--block .hk-list-table {
 	padding: 0;
 	border: none;
 	border-radius: 0;

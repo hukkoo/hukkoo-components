@@ -41,11 +41,16 @@
 }
 
 /* ---- Colors: each sets --hk-btn-c/--hk-btn-c-hover for the style
-   variants below to key off of, in addition to their own solid fill. ---- */
+   variants below to key off of, in addition to their own solid fill.
+   --hk-btn-c-on (always var(--hk-color-on-color), i.e. white) exists
+   purely so a rule can tell "a color variant IS set" from "it isn't" via
+   the var() fallback chain — see .hk-button--outline:hover below, the
+   one style whose hover state needs to know the difference. ---- */
 
 .hk-button--neutral {
 	--hk-btn-c: var(--hk-color-neutral);
 	--hk-btn-c-hover: var(--hk-color-neutral-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
@@ -54,6 +59,7 @@
 .hk-button--primary {
 	--hk-btn-c: var(--hk-color-primary);
 	--hk-btn-c-hover: var(--hk-color-primary-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
@@ -62,6 +68,7 @@
 .hk-button--secondary {
 	--hk-btn-c: var(--hk-color-secondary);
 	--hk-btn-c-hover: var(--hk-color-secondary-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
@@ -70,6 +77,7 @@
 .hk-button--accent {
 	--hk-btn-c: var(--hk-color-accent);
 	--hk-btn-c-hover: var(--hk-color-accent-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
@@ -78,6 +86,7 @@
 .hk-button--info {
 	--hk-btn-c: var(--hk-color-info);
 	--hk-btn-c-hover: var(--hk-color-info-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
@@ -86,6 +95,7 @@
 .hk-button--success {
 	--hk-btn-c: var(--hk-color-success);
 	--hk-btn-c-hover: var(--hk-color-success-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
@@ -94,6 +104,7 @@
 .hk-button--warning {
 	--hk-btn-c: var(--hk-color-warning);
 	--hk-btn-c-hover: var(--hk-color-warning-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
@@ -102,11 +113,20 @@
 .hk-button--error {
 	--hk-btn-c: var(--hk-color-error);
 	--hk-btn-c-hover: var(--hk-color-error-hover);
+	--hk-btn-c-on: var(--hk-color-on-color);
 	background: var(--hk-btn-c);
 	border-color: var(--hk-btn-c);
 	color: var(--hk-color-on-color);
 }
 
+/* color is re-asserted here (not just inherited from the base .hk-button--*
+   rule) because a solid-color Button can render as <a> (via its 'url'
+   arg): WP admin's own `a:hover { color: ... }` has specificity (0,1,1),
+   one point higher than a plain `.hk-button--primary` (0,1,0), so on
+   hover it was winning and replacing the white on-color text with WP's
+   link-blue — nearly invisible against this button's own blue hover
+   background. Matching WP's own (0,1,1) here (element + pseudo-class)
+   restores it, with our later source order breaking the tie. */
 .hk-button--neutral:hover:not(:disabled),
 .hk-button--primary:hover:not(:disabled),
 .hk-button--secondary:hover:not(:disabled),
@@ -117,6 +137,7 @@
 .hk-button--error:hover:not(:disabled) {
 	background: var(--hk-btn-c-hover);
 	border-color: var(--hk-btn-c-hover);
+	color: var(--hk-color-on-color);
 	filter: none;
 }
 
@@ -129,9 +150,15 @@
 	color: var(--hk-btn-c, var(--hk-color-text));
 }
 
+/* color falls back through --hk-btn-c-on rather than hardcoding
+   on-color: an outline Button with no color arg (e.g. View/Edit row
+   actions) hovers to a plain light-gray fill, not a solid color one, so
+   its text needs to stay dark — hardcoding on-color here made it white
+   on near-white and unreadable. Only a colored outline (--hk-btn-c-on
+   actually set, e.g. Delete's error-red) should flip to white. */
 .hk-button--outline:hover:not(:disabled) {
 	background: var(--hk-btn-c, var(--hk-color-surface-alt));
-	color: var(--hk-color-on-color);
+	color: var(--hk-btn-c-on, var(--hk-color-text));
 	filter: none;
 }
 
@@ -955,11 +982,18 @@
 
 /* The wrap owns the rounded corners/shadow — a <table> with
    border-collapse: collapse can't reliably clip its own corners, so the
-   card look lives one level up instead. */
+   card look lives one level up instead. overflow-x: auto rather than
+   plain hidden so a table with more columns than fit the container
+   (a real host's user-defined field count is unbounded — see
+   hukkoo-core's per-table records screens) scrolls horizontally instead
+   of silently clipping the columns that don't fit. overflow-y stays
+   hidden since it's only ever the corner-clip's job, not a scroll axis
+   — row count is handled by pagination, not a vertical scrollbar here. */
 .hk-table-wrap {
 	border: 1px solid var(--hk-color-border);
 	border-radius: var(--hk-radius-lg);
-	overflow: hidden;
+	overflow-x: auto;
+	overflow-y: hidden;
 	background: var(--hk-color-surface);
 	box-shadow: var(--hk-shadow-sm);
 }
@@ -1104,14 +1138,24 @@
 	gap: var(--hk-space-1);
 }
 
-/* CrudTable's own card frame — without this, a real host gets the search
-   box and Add button floating directly on its bare page background with
-   only the inner <table> boxed (from .hk-table-wrap), since the padded/
-   bordered look in the Showcase demos comes from Showcase-only wrapper
-   chrome, not from CrudTable itself. The inner .hk-table-wrap's own
-   border/radius/shadow is suppressed here so the two don't nest into a
-   box-in-box. */
-.hk-crud-table {
+/* ListTable's bulk-actions bar (Select + Apply, above the table, inside
+   the same <form> as the row checkboxes it acts on). */
+.hk-table-bulk-bar {
+	display: flex;
+	align-items: flex-end;
+	gap: var(--hk-space-2);
+	margin-bottom: var(--hk-space-3);
+}
+
+/* CrudTable/ListTable's own card frame — without this, a real host gets
+   the search box and Add button floating directly on its bare page
+   background with only the inner <table> boxed (from .hk-table-wrap),
+   since the padded/bordered look in the Showcase demos comes from
+   Showcase-only wrapper chrome, not from either component itself. The
+   inner .hk-table-wrap's own border/radius/shadow is suppressed here so
+   the two don't nest into a box-in-box. */
+.hk-crud-table,
+.hk-list-table {
 	padding: var(--hk-space-5);
 	border: 1px solid var(--hk-color-border);
 	border-radius: var(--hk-radius-lg);
@@ -1119,7 +1163,8 @@
 	box-shadow: var(--hk-shadow-sm);
 }
 
-.hk-crud-table .hk-table-wrap {
+.hk-crud-table .hk-table-wrap,
+.hk-list-table .hk-table-wrap {
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
@@ -1379,7 +1424,8 @@
 	background: var(--hk-color-surface-alt);
 }
 
-.hk-pagination-item:disabled {
+.hk-pagination-item:disabled,
+.hk-pagination-item--disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
 }
