@@ -1,0 +1,51 @@
+/**
+ * Reset + base typography, scoped under .hk-page so this library never
+ * leaks styles onto markup it doesn't own (host admin screens, other
+ * plugins' output, etc).
+ */
+
+.hk-page,
+.hk-page * {
+	box-sizing: border-box;
+}
+
+.hk-page {
+	color: var(--hk-color-text);
+	background: var(--hk-color-bg);
+	font-family: var(--hk-font-family);
+	font-size: var(--hk-font-size-md);
+	line-height: var(--hk-line-height);
+	-webkit-font-smoothing: antialiased;
+}
+
+.hk-page h1,
+.hk-page h2,
+.hk-page h3,
+.hk-page h4 {
+	margin: 0 0 var(--hk-space-3);
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.hk-page p {
+	margin: 0 0 var(--hk-space-3);
+}
+
+.hk-page a {
+	color: var(--hk-color-primary);
+	text-decoration: none;
+}
+
+.hk-page a:hover {
+	text-decoration: underline;
+}
+
+.hk-page code,
+.hk-page pre {
+	font-family: var(--hk-font-family-mono);
+}
+
+.hk-page :focus-visible {
+	outline: 2px solid var(--hk-color-primary);
+	outline-offset: 2px;
+}

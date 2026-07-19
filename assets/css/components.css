@@ -1,0 +1,1452 @@
+/**
+ * Component visuals. One banner-commented section per component, keeping
+ * the file navigable without splitting into a build step. All values
+ * reference tokens from variables.css — nothing here should hardcode a
+ * color, radius, or spacing value directly.
+ */
+
+/* ==========================================================================
+   Button
+   ========================================================================== */
+
+.hk-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--hk-space-2);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-md);
+	padding: var(--hk-space-2) var(--hk-space-4);
+	font-size: var(--hk-font-size-md);
+	font-weight: 500;
+	background: var(--hk-color-surface-alt);
+	color: var(--hk-color-text);
+	cursor: pointer;
+	transition: background-color var(--hk-transition-fast), border-color var(--hk-transition-fast),
+		filter var(--hk-transition-fast), transform var(--hk-transition-fast);
+}
+
+.hk-button:hover:not(:disabled) {
+	filter: brightness(0.96);
+}
+
+.hk-button:active:not(:disabled) {
+	transform: scale(0.97);
+}
+
+.hk-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ---- Colors: each sets --hk-btn-c/--hk-btn-c-hover for the style
+   variants below to key off of, in addition to their own solid fill. ---- */
+
+.hk-button--neutral {
+	--hk-btn-c: var(--hk-color-neutral);
+	--hk-btn-c-hover: var(--hk-color-neutral-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--primary {
+	--hk-btn-c: var(--hk-color-primary);
+	--hk-btn-c-hover: var(--hk-color-primary-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--secondary {
+	--hk-btn-c: var(--hk-color-secondary);
+	--hk-btn-c-hover: var(--hk-color-secondary-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--accent {
+	--hk-btn-c: var(--hk-color-accent);
+	--hk-btn-c-hover: var(--hk-color-accent-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--info {
+	--hk-btn-c: var(--hk-color-info);
+	--hk-btn-c-hover: var(--hk-color-info-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--success {
+	--hk-btn-c: var(--hk-color-success);
+	--hk-btn-c-hover: var(--hk-color-success-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--warning {
+	--hk-btn-c: var(--hk-color-warning);
+	--hk-btn-c-hover: var(--hk-color-warning-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--error {
+	--hk-btn-c: var(--hk-color-error);
+	--hk-btn-c-hover: var(--hk-color-error-hover);
+	background: var(--hk-btn-c);
+	border-color: var(--hk-btn-c);
+	color: var(--hk-color-on-color);
+}
+
+.hk-button--neutral:hover:not(:disabled),
+.hk-button--primary:hover:not(:disabled),
+.hk-button--secondary:hover:not(:disabled),
+.hk-button--accent:hover:not(:disabled),
+.hk-button--info:hover:not(:disabled),
+.hk-button--success:hover:not(:disabled),
+.hk-button--warning:hover:not(:disabled),
+.hk-button--error:hover:not(:disabled) {
+	background: var(--hk-btn-c-hover);
+	border-color: var(--hk-btn-c-hover);
+	filter: none;
+}
+
+/* ---- Styles: layer over the base or a color's --hk-btn-c custom
+   property, so one rule per style covers every color combination. ---- */
+
+.hk-button--outline {
+	background: transparent;
+	border-color: var(--hk-btn-c, var(--hk-color-border));
+	color: var(--hk-btn-c, var(--hk-color-text));
+}
+
+.hk-button--outline:hover:not(:disabled) {
+	background: var(--hk-btn-c, var(--hk-color-surface-alt));
+	color: var(--hk-color-on-color);
+	filter: none;
+}
+
+.hk-button--dash {
+	background: transparent;
+	border-style: dashed;
+	border-color: var(--hk-btn-c, var(--hk-color-border));
+	color: var(--hk-btn-c, var(--hk-color-text));
+}
+
+.hk-button--dash:hover:not(:disabled) {
+	background: color-mix(in srgb, var(--hk-btn-c, var(--hk-color-text)) 10%, transparent);
+	filter: none;
+}
+
+.hk-button--soft {
+	background: color-mix(in srgb, var(--hk-btn-c, var(--hk-color-text)) 12%, transparent);
+	border-color: transparent;
+	color: var(--hk-btn-c, var(--hk-color-text));
+}
+
+.hk-button--soft:hover:not(:disabled) {
+	background: color-mix(in srgb, var(--hk-btn-c, var(--hk-color-text)) 22%, transparent);
+	filter: none;
+}
+
+.hk-button--ghost {
+	background: transparent;
+	border-color: transparent;
+	color: var(--hk-btn-c, var(--hk-color-text));
+}
+
+.hk-button--ghost:hover:not(:disabled) {
+	background: var(--hk-color-surface-alt);
+	filter: none;
+}
+
+.hk-button--link {
+	background: transparent;
+	border-color: transparent;
+	color: var(--hk-btn-c, var(--hk-color-primary));
+	text-decoration: underline;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.hk-button--link:hover:not(:disabled) {
+	background: transparent;
+	filter: none;
+}
+
+/* ---- Sizes ---- */
+
+.hk-button--xs {
+	padding: var(--hk-space-1) var(--hk-space-2);
+	font-size: var(--hk-font-size-xs);
+	gap: var(--hk-space-1);
+}
+
+.hk-button--sm {
+	padding: var(--hk-space-1) var(--hk-space-3);
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-button--lg {
+	padding: var(--hk-space-3) var(--hk-space-5);
+	font-size: var(--hk-font-size-lg);
+}
+
+.hk-button--xl {
+	padding: var(--hk-space-4) var(--hk-space-6);
+	font-size: var(--hk-font-size-xl);
+}
+
+/* ---- Shapes ---- */
+
+.hk-button--square {
+	aspect-ratio: 1;
+	padding: var(--hk-space-2);
+}
+
+.hk-button--circle {
+	aspect-ratio: 1;
+	padding: var(--hk-space-2);
+	border-radius: var(--hk-radius-full);
+}
+
+.hk-button--wide {
+	padding-left: var(--hk-space-8);
+	padding-right: var(--hk-space-8);
+}
+
+.hk-button--block {
+	display: flex;
+	width: 100%;
+}
+
+/* ---- States ---- */
+
+.hk-button--active {
+	filter: brightness(0.9);
+	transform: scale(0.97);
+}
+
+.hk-button-spinner {
+	width: 1em;
+	height: 1em;
+	border: 2px solid currentColor;
+	border-right-color: transparent;
+	border-radius: var(--hk-radius-full);
+	animation: hk-button-spin calc(var(--hk-transition-base) * 3) linear infinite;
+}
+
+/* Sizes any inline SVG icon relative to the button's own font-size — an
+   SVG with only a viewBox and no width/height (IconButton's contract)
+   otherwise falls back to the UA default intrinsic size (300×150),
+   which is why an unsized icon renders far too large or shrinks the
+   surrounding square button to almost nothing. */
+.hk-icon {
+	width: 1em;
+	height: 1em;
+	flex-shrink: 0;
+}
+
+@keyframes hk-button-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+
+.hk-card {
+	background: var(--hk-color-surface);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-lg);
+	box-shadow: var(--hk-shadow-sm);
+	overflow: hidden;
+}
+
+.hk-card-header {
+	padding: var(--hk-space-4);
+	border-bottom: 1px solid var(--hk-color-border);
+}
+
+.hk-card-title {
+	font-size: var(--hk-font-size-lg);
+	margin: 0;
+}
+
+.hk-card-body {
+	padding: var(--hk-space-4);
+}
+
+.hk-card-footer {
+	padding: var(--hk-space-4);
+	border-top: 1px solid var(--hk-color-border);
+	background: var(--hk-color-surface-alt);
+}
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+.hk-container {
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.hk-container--narrow {
+	max-width: 640px;
+}
+
+.hk-container--wide {
+	max-width: 1280px;
+}
+
+/* ==========================================================================
+   Form / Field
+   ========================================================================== */
+
+.hk-form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--hk-space-4);
+}
+
+.hk-form--grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	align-items: start;
+}
+
+@media (max-width: 640px) {
+	.hk-form--grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Shared by Field, Checkbox and Radio's wrapper elements — a single
+   spanning utility rather than one per field type, since it means the
+   same thing regardless of which element it lands on: take every
+   column in the parent Form's grid instead of just one. */
+.hk-field--full {
+	grid-column: 1 / -1;
+}
+
+.hk-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--hk-space-1);
+}
+
+.hk-field-label {
+	font-size: var(--hk-font-size-sm);
+	font-weight: 600;
+}
+
+.hk-field-required {
+	color: var(--hk-color-danger);
+}
+
+/* .hk-page-prefixed so this beats the host admin's own default
+   `input[type=x]` / `input[type=x]:focus` rules on specificity — those
+   carry an attribute selector (0,1,1 / 0,2,1), which a bare `.hk-field-input`
+   (0,1,0 / 0,2,0) loses to regardless of stylesheet order. WP admin's own
+   focus box-shadow is reset here too, since it paints independently of
+   our outline/border and would otherwise show through as a second ring. */
+.hk-page .hk-field-input {
+	border: 1px solid var(--hk-field-c, var(--hk-color-border));
+	border-radius: var(--hk-radius-md);
+	padding: var(--hk-space-2) var(--hk-space-3);
+	font-size: var(--hk-font-size-md);
+	/* Explicit rather than the browser's "normal": form controls don't
+	   inherit line-height, and "normal" resolves to a different actual
+	   height for a flex-laid-out <button> (the select trigger) than for
+	   a plain text <input> — leaving both at "normal" is how Input and
+	   Select ended up 5.5px apart despite identical padding/border. */
+	line-height: var(--hk-line-height);
+	background: var(--hk-color-surface);
+	color: var(--hk-color-text);
+	/* Explicit height, not just line-height + padding: input[type=date]'s
+	   native calendar-picker sub-layout still renders taller than a plain
+	   text input's line box even with matching line-height, so the box
+	   model math alone doesn't guarantee equal height across element
+	   types. Fixing height directly makes it exact everywhere. */
+	height: calc(var(--hk-font-size-md) * var(--hk-line-height) + var(--hk-space-2) * 2 + 2px);
+	/* Present at rest with zero spread/alpha so focus can transition the
+	   ring in smoothly instead of an outline snapping on. */
+	box-shadow: 0 0 0 0 transparent;
+	transition: border-color var(--hk-transition-fast), background-color var(--hk-transition-fast),
+		box-shadow var(--hk-transition-base);
+}
+
+.hk-page .hk-field-input:focus {
+	outline: none;
+	border-color: var(--hk-field-c, var(--hk-color-primary));
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--hk-field-c, var(--hk-color-primary)) 30%, transparent);
+}
+
+.hk-page .hk-field-input:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	background: var(--hk-color-surface-alt);
+}
+
+/* ---- Colors: each just sets --hk-field-c, consumed by the border/focus
+   rules above — same indirection pattern as the Button component. ---- */
+
+.hk-field-input--neutral {
+	--hk-field-c: var(--hk-color-neutral);
+}
+
+.hk-field-input--primary {
+	--hk-field-c: var(--hk-color-primary);
+}
+
+.hk-field-input--secondary {
+	--hk-field-c: var(--hk-color-secondary);
+}
+
+.hk-field-input--accent {
+	--hk-field-c: var(--hk-color-accent);
+}
+
+.hk-field-input--info {
+	--hk-field-c: var(--hk-color-info);
+}
+
+.hk-field-input--success {
+	--hk-field-c: var(--hk-color-success);
+}
+
+.hk-field-input--warning {
+	--hk-field-c: var(--hk-color-warning);
+}
+
+.hk-field-input--error {
+	--hk-field-c: var(--hk-color-error);
+}
+
+/* ---- Sizes ---- */
+
+.hk-field-input--xs {
+	padding: var(--hk-space-1) var(--hk-space-2);
+	font-size: var(--hk-font-size-xs);
+	height: calc(var(--hk-font-size-xs) * var(--hk-line-height) + var(--hk-space-1) * 2 + 2px);
+}
+
+.hk-field-input--sm {
+	padding: var(--hk-space-1) var(--hk-space-3);
+	font-size: var(--hk-font-size-sm);
+	height: calc(var(--hk-font-size-sm) * var(--hk-line-height) + var(--hk-space-1) * 2 + 2px);
+}
+
+.hk-field-input--lg {
+	padding: var(--hk-space-3) var(--hk-space-4);
+	font-size: var(--hk-font-size-lg);
+	height: calc(var(--hk-font-size-lg) * var(--hk-line-height) + var(--hk-space-3) * 2 + 2px);
+}
+
+.hk-field-input--xl {
+	padding: var(--hk-space-4) var(--hk-space-5);
+	font-size: var(--hk-font-size-xl);
+	height: calc(var(--hk-font-size-xl) * var(--hk-line-height) + var(--hk-space-4) * 2 + 2px);
+}
+
+/* ---- Ghost ---- */
+
+.hk-page .hk-field-input--ghost {
+	background: transparent;
+	border-color: transparent;
+}
+
+.hk-page .hk-field-input--ghost:focus {
+	background: var(--hk-color-surface);
+	border-color: var(--hk-field-c, var(--hk-color-primary));
+}
+
+/* ---- Textarea — needs to grow with content, so the fixed single-row
+   height every other field-input shares doesn't apply here. ---- */
+
+.hk-page .hk-field-input.hk-field-textarea {
+	height: auto;
+	min-height: calc(var(--hk-font-size-md) * var(--hk-line-height) * 3 + var(--hk-space-2) * 2 + 2px);
+	font-family: var(--hk-font-family);
+	resize: vertical;
+}
+
+/* ---- Color — a swatch, not a text box, so it gets its own width
+   instead of stretching full-width like Text/Select/Date. ---- */
+
+.hk-page .hk-field-input.hk-color-input {
+	width: calc(var(--hk-space-8) + var(--hk-space-2));
+	padding: var(--hk-space-1);
+	cursor: pointer;
+}
+
+/* Inside a Form's 'grid' layout, a fixed-width swatch leaves the rest of
+   its column empty — every other field fills its cell, so this one
+   should too. The compact width above stays the default for a Color
+   field used on its own (see the Input gallery's Color section).
+   Needs the .hk-page prefix to outweigh that rule's own specificity
+   (.hk-page.hk-field-input.hk-color-input), not just source order. */
+.hk-page .hk-form--grid .hk-color-input {
+	width: 100%;
+}
+
+/* ---- File — style the browse button; the native "no file chosen"
+   text stays as-is since it isn't independently stylable. ---- */
+
+.hk-page .hk-field-input.hk-file-input::file-selector-button {
+	margin-right: var(--hk-space-3);
+	padding: var(--hk-space-1) var(--hk-space-3);
+	border: none;
+	border-radius: var(--hk-radius-sm);
+	background: var(--hk-field-c, var(--hk-color-primary));
+	color: var(--hk-color-on-color);
+	cursor: pointer;
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-page .hk-field-input.hk-file-input::file-selector-button:hover {
+	filter: brightness(0.95);
+}
+
+/* ---- Checkbox / Radio — native controls tinted via accent-color
+   rather than rebuilt, since (unlike Select's <option> or Date's
+   calendar popup) both are already stylable enough for this. ---- */
+
+.hk-checkbox-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--hk-space-1);
+}
+
+.hk-checkbox-row,
+.hk-radio-row {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--hk-space-2);
+	cursor: pointer;
+}
+
+.hk-checkbox-label {
+	font-size: var(--hk-font-size-md);
+	color: var(--hk-color-text);
+}
+
+/* .hk-page-prefixed + explicit appearance: WP admin re-skins checkboxes
+   and radios with `appearance: none` plus its own solid background,
+   which makes accent-color a no-op — the checkbox renders WP's blue
+   regardless of what color modifier is applied. Restoring native
+   appearance (at enough specificity to beat WP's `input[type=x]` rule)
+   is what makes accent-color take effect again. */
+.hk-page .hk-checkbox,
+.hk-page .hk-radio {
+	appearance: auto;
+	width: 1.125rem;
+	height: 1.125rem;
+	accent-color: var(--hk-color-primary);
+	cursor: pointer;
+}
+
+.hk-page .hk-checkbox--neutral,
+.hk-page .hk-radio--neutral {
+	accent-color: var(--hk-color-neutral);
+}
+
+.hk-page .hk-checkbox--primary,
+.hk-page .hk-radio--primary {
+	accent-color: var(--hk-color-primary);
+}
+
+.hk-page .hk-checkbox--secondary,
+.hk-page .hk-radio--secondary {
+	accent-color: var(--hk-color-secondary);
+}
+
+.hk-page .hk-checkbox--accent,
+.hk-page .hk-radio--accent {
+	accent-color: var(--hk-color-accent);
+}
+
+.hk-page .hk-checkbox--info,
+.hk-page .hk-radio--info {
+	accent-color: var(--hk-color-info);
+}
+
+.hk-page .hk-checkbox--success,
+.hk-page .hk-radio--success {
+	accent-color: var(--hk-color-success);
+}
+
+.hk-page .hk-checkbox--warning,
+.hk-page .hk-radio--warning {
+	accent-color: var(--hk-color-warning);
+}
+
+.hk-page .hk-checkbox--error,
+.hk-page .hk-radio--error {
+	accent-color: var(--hk-color-error);
+}
+
+.hk-radio-group {
+	border: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--hk-space-2);
+}
+
+.hk-radio-options {
+	display: flex;
+	flex-direction: column;
+	gap: var(--hk-space-2);
+}
+
+/* WebKit's built-in calendar-picker-indicator carries its own padding
+   that isn't governed by the input's line-height, so input[type=date]
+   otherwise renders visibly taller than a same-sized text input despite
+   sharing every other rule above. */
+.hk-page input[type="date"].hk-field-input::-webkit-calendar-picker-indicator {
+	padding: 0;
+	margin-left: var(--hk-space-2);
+}
+
+/* ---- Select — a button+listbox widget, not a native <select>. Native
+   <option> popups are OS-drawn and can't be styled or positioned by CSS
+   at all, which is exactly what's needed here. ---- */
+
+.hk-page .hk-select,
+.hk-page .hk-date {
+	position: relative;
+	display: inline-flex;
+}
+
+.hk-page .hk-select-trigger {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--hk-space-2);
+	width: 100%;
+	min-width: 10ch;
+	text-align: left;
+	cursor: pointer;
+}
+
+.hk-select-value {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.hk-select-caret {
+	width: 0;
+	height: 0;
+	flex-shrink: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 5px solid var(--hk-color-text-muted);
+}
+
+.hk-page .hk-select-menu {
+	position: absolute;
+	top: calc(100% + var(--hk-space-1));
+	left: 0;
+	right: 0;
+	z-index: var(--hk-z-dropdown);
+	margin: 0;
+	padding: var(--hk-space-1);
+	list-style: none;
+	background: var(--hk-color-surface);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-md);
+	box-shadow: var(--hk-shadow-md);
+	/* No token fits a one-off "how tall can a dropdown get before it
+	   scrolls" value — same pragmatic exception as the button spinner's
+	   literal border-width below. */
+	max-height: 16rem;
+	overflow-y: auto;
+}
+
+.hk-select-option {
+	/* Row height (padding + line-height together, not just padding —
+	   line-height is actually the bigger share) cut by ~25% versus the
+	   field's own row height. */
+	padding: calc(var(--hk-space-2) * 0.7) var(--hk-space-3);
+	line-height: 1.2;
+	border-radius: var(--hk-radius-sm);
+	color: var(--hk-color-text);
+	cursor: pointer;
+}
+
+.hk-select-option:hover,
+.hk-select-option:focus {
+	background: var(--hk-color-surface-alt);
+	outline: none;
+}
+
+.hk-select-option--selected {
+	background: var(--hk-field-c, var(--hk-color-primary));
+	color: var(--hk-color-on-color);
+}
+
+.hk-select-option--selected:hover,
+.hk-select-option--selected:focus {
+	background: var(--hk-field-c, var(--hk-color-primary));
+	filter: brightness(0.95);
+}
+
+/* ---- Lookup — Select's panel plus a search input above the list,
+   since a lookup's option list is typically much longer. ---- */
+
+.hk-page .hk-lookup-panel {
+	position: absolute;
+	top: calc(100% + var(--hk-space-1));
+	left: 0;
+	right: 0;
+	z-index: var(--hk-z-dropdown);
+	padding: var(--hk-space-2);
+	background: var(--hk-color-surface);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-md);
+	box-shadow: var(--hk-shadow-md);
+}
+
+.hk-page .hk-lookup-search {
+	width: 100%;
+	margin-bottom: var(--hk-space-2);
+	padding: var(--hk-space-1) var(--hk-space-2);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-sm);
+	font-size: var(--hk-font-size-sm);
+	background: var(--hk-color-surface);
+	color: var(--hk-color-text);
+}
+
+.hk-page .hk-lookup-search:focus {
+	outline: none;
+	border-color: var(--hk-field-c, var(--hk-color-primary));
+}
+
+.hk-lookup-options {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-height: 12rem;
+	overflow-y: auto;
+}
+
+.hk-lookup-empty {
+	padding: var(--hk-space-2);
+	margin: 0;
+	text-align: center;
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-sm);
+}
+
+/* ---- Date — a button+calendar-panel widget, mirroring Select's
+   button+listbox approach: native date-picker popups are OS-drawn and
+   can't be styled or positioned by CSS either. The trigger reuses
+   .hk-select-trigger/-value/-caret since the box is identical. ---- */
+
+.hk-page .hk-date-panel {
+	position: absolute;
+	top: calc(100% + var(--hk-space-1));
+	left: 0;
+	z-index: var(--hk-z-dropdown);
+	padding: var(--hk-space-3);
+	background: var(--hk-color-surface);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-md);
+	box-shadow: var(--hk-shadow-md);
+	width: 17rem;
+}
+
+.hk-date-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: var(--hk-space-2);
+}
+
+.hk-date-nav {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--hk-space-6);
+	height: var(--hk-space-6);
+	border: none;
+	border-radius: var(--hk-radius-sm);
+	background: transparent;
+	color: var(--hk-color-text);
+	font-size: var(--hk-font-size-lg);
+	line-height: 1;
+	cursor: pointer;
+}
+
+.hk-date-nav:hover {
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-date-label {
+	font-weight: 600;
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-date-weekdays,
+.hk-date-grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 2px;
+}
+
+.hk-date-weekday {
+	text-align: center;
+	font-size: var(--hk-font-size-xs);
+	color: var(--hk-color-text-muted);
+	padding: var(--hk-space-1) 0;
+}
+
+.hk-date-day {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 1;
+	border: none;
+	border-radius: var(--hk-radius-sm);
+	background: transparent;
+	color: var(--hk-color-text);
+	font-size: var(--hk-font-size-sm);
+	cursor: pointer;
+}
+
+.hk-date-day:hover:not(:disabled) {
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-date-day:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px var(--hk-field-c, var(--hk-color-primary));
+}
+
+.hk-date-day--outside {
+	color: var(--hk-color-text-muted);
+}
+
+.hk-date-day--today {
+	font-weight: 600;
+	box-shadow: inset 0 0 0 1px var(--hk-field-c, var(--hk-color-primary));
+}
+
+.hk-date-day--selected {
+	background: var(--hk-field-c, var(--hk-color-primary));
+	color: var(--hk-color-on-color);
+}
+
+.hk-date-day--selected:hover {
+	background: var(--hk-field-c, var(--hk-color-primary));
+	filter: brightness(0.95);
+}
+
+.hk-date-day:disabled {
+	color: var(--hk-color-text-muted);
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+/* ---- Time columns — shared by the standalone Time widget and
+   DateTime's combined panel. ---- */
+
+.hk-time-columns {
+	display: flex;
+	gap: var(--hk-space-2);
+	margin-top: var(--hk-space-2);
+	padding-top: var(--hk-space-2);
+	border-top: 1px solid var(--hk-color-border);
+}
+
+.hk-date-panel > .hk-time-columns:first-child {
+	margin-top: 0;
+	padding-top: 0;
+	border-top: none;
+}
+
+.hk-time-column {
+	flex: 1;
+	max-height: 10rem;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.hk-time-option {
+	padding: var(--hk-space-1) var(--hk-space-2);
+	text-align: center;
+	border: none;
+	border-radius: var(--hk-radius-sm);
+	background: transparent;
+	color: var(--hk-color-text);
+	font-size: var(--hk-font-size-sm);
+	cursor: pointer;
+}
+
+.hk-time-option:hover {
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-time-option:focus {
+	outline: none;
+	box-shadow: 0 0 0 2px var(--hk-field-c, var(--hk-color-primary));
+}
+
+.hk-time-option--selected {
+	background: var(--hk-field-c, var(--hk-color-primary));
+	color: var(--hk-color-on-color);
+}
+
+.hk-time-done {
+	display: block;
+	width: 100%;
+	margin-top: var(--hk-space-2);
+	padding: var(--hk-space-1) var(--hk-space-3);
+	border: none;
+	border-radius: var(--hk-radius-sm);
+	background: var(--hk-field-c, var(--hk-color-primary));
+	color: var(--hk-color-on-color);
+	font-size: var(--hk-font-size-sm);
+	cursor: pointer;
+}
+
+.hk-time-done:hover {
+	filter: brightness(0.95);
+}
+
+.hk-field-description {
+	font-size: var(--hk-font-size-sm);
+	color: var(--hk-color-text-muted);
+	margin: 0;
+}
+
+.hk-field-error {
+	font-size: var(--hk-font-size-sm);
+	color: var(--hk-color-danger);
+	margin: 0;
+}
+
+.hk-field--error .hk-field-input {
+	border-color: var(--hk-color-danger);
+}
+
+/* ==========================================================================
+   Table
+   ========================================================================== */
+
+/* The wrap owns the rounded corners/shadow — a <table> with
+   border-collapse: collapse can't reliably clip its own corners, so the
+   card look lives one level up instead. */
+.hk-table-wrap {
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-lg);
+	overflow: hidden;
+	background: var(--hk-color-surface);
+	box-shadow: var(--hk-shadow-sm);
+}
+
+.hk-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--hk-font-size-md);
+}
+
+.hk-table th {
+	text-align: left;
+	padding: var(--hk-space-3) var(--hk-space-4);
+	background: var(--hk-color-surface-alt);
+	border-bottom: 1px solid var(--hk-color-border);
+	font-weight: 500;
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-table td {
+	padding: var(--hk-space-4);
+	border-bottom: 1px solid var(--hk-color-border);
+	transition: background-color var(--hk-transition-fast);
+	color: var(--hk-color-text);
+}
+
+.hk-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.hk-table tbody tr:hover td {
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-table-empty {
+	text-align: center;
+	color: var(--hk-color-text-muted);
+	padding: var(--hk-space-8);
+}
+
+.hk-table--sm th,
+.hk-table--sm td {
+	padding: var(--hk-space-1) var(--hk-space-2);
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-table--lg th,
+.hk-table--lg td {
+	padding: var(--hk-space-3) var(--hk-space-4);
+	font-size: var(--hk-font-size-lg);
+}
+
+.hk-table--striped tbody tr:nth-child(even) {
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-table--striped tbody tr:nth-child(even):hover td {
+	background: var(--hk-color-border);
+}
+
+.hk-table--bordered th,
+.hk-table--bordered td {
+	border: 1px solid var(--hk-color-border);
+}
+
+.hk-table-sort {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--hk-space-1);
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	text-transform: inherit;
+	letter-spacing: inherit;
+	cursor: pointer;
+}
+
+.hk-table-sort:hover {
+	color: var(--hk-color-text);
+}
+
+.hk-sort-indicator {
+	font-size: 0.9em;
+}
+
+/* Gallery preview rows flex-wrap narrow items (buttons, inputs) side by
+   side by default; a table needs the full row instead of being squeezed
+   into a shared one. */
+.hk-gallery-preview-item:has(.hk-table) {
+	width: 100%;
+}
+
+.hk-gallery-preview-item .hk-table-wrap {
+	width: 100%;
+}
+
+/* Same reasoning as the table rule above: three Container width variants
+   side by side in a flex-wrap row all render at the same shrink-to-fit
+   size, which hides the very thing the demo is meant to show. Stacking
+   them full-width lets the max-width difference actually read. */
+.hk-gallery-preview-item:has(.hk-gallery-container-demo) {
+	width: 100%;
+}
+
+/* Same reasoning again: a real multi-field form needs the full row
+   rather than shrinking to whatever a flex item's content happens to
+   fit — true for both the default stacked layout and 'grid'. The
+   :has() rule on the item gives it a definite width to fill; .hk-form
+   still needs its own width: 100% since row-direction flex items don't
+   stretch on the main axis the way cross-axis children do.
+   The card itself (.hk-gallery-preview-row — shared by every gallery
+   section, so scoped with :has() rather than given a blanket max-width)
+   is capped too: left at the section's full width, a two-column form
+   reads as sprawling edge-to-edge rather than a real settings-page-style
+   form, and without the cap the card stays wider than the form, leaving
+   empty space beside it — the same problem in a different ratio. */
+.hk-gallery-preview-row:has(.hk-form) {
+	max-width: 640px;
+}
+
+.hk-gallery-preview-item:has(.hk-form) {
+	width: 100%;
+}
+
+.hk-gallery-preview-item .hk-form {
+	width: 100%;
+}
+
+/* ==========================================================================
+   Badge
+   ========================================================================== */
+
+.hk-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--hk-space-1);
+	padding: calc(var(--hk-space-1) / 2) var(--hk-space-2);
+	border-radius: var(--hk-radius-full);
+	font-size: var(--hk-font-size-xs);
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--hk-color-on-color);
+}
+
+.hk-badge--neutral {
+	--hk-badge-c: var(--hk-color-neutral);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--primary {
+	--hk-badge-c: var(--hk-color-primary);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--secondary {
+	--hk-badge-c: var(--hk-color-secondary);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--accent {
+	--hk-badge-c: var(--hk-color-accent);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--info {
+	--hk-badge-c: var(--hk-color-info);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--success {
+	--hk-badge-c: var(--hk-color-success);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--warning {
+	--hk-badge-c: var(--hk-color-warning);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--error {
+	--hk-badge-c: var(--hk-color-error);
+	background: var(--hk-badge-c);
+}
+
+.hk-badge--lg {
+	padding: var(--hk-space-1) var(--hk-space-3);
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-badge--soft {
+	background: color-mix(in srgb, var(--hk-badge-c, var(--hk-color-neutral)) 15%, transparent);
+	color: var(--hk-badge-c, var(--hk-color-neutral));
+}
+
+/* Surface + border instead of a filled pill — the color reads through the
+   dot (see .hk-badge-dot) or the text alone, e.g. a table's "Active"
+   status cell. Comes after the color/soft modifiers above so it wins the
+   background/color cascade while still inheriting --hk-badge-c from them
+   for the dot to pick up. */
+.hk-badge--outline {
+	background: var(--hk-color-surface);
+	border: 1px solid var(--hk-color-border);
+	color: var(--hk-color-text);
+}
+
+.hk-badge-dot {
+	width: 6px;
+	height: 6px;
+	border-radius: var(--hk-radius-full);
+	background: var(--hk-badge-c, var(--hk-color-neutral));
+	flex-shrink: 0;
+}
+
+/* A small circular initials avatar — used by the Table gallery's full
+   example (member name column). Not a full component of its own since
+   nothing else in the library needs it yet. */
+.hk-avatar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--hk-space-8);
+	height: var(--hk-space-8);
+	flex-shrink: 0;
+	border-radius: var(--hk-radius-full);
+	background: var(--hk-color-neutral);
+	color: var(--hk-color-on-color);
+	font-size: var(--hk-font-size-xs);
+	font-weight: 600;
+}
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
+
+.hk-modal {
+	position: fixed;
+	inset: 0;
+	z-index: var(--hk-z-modal);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--hk-space-4);
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.hk-modal[hidden] {
+	display: none;
+}
+
+.hk-modal-panel {
+	position: relative;
+	width: 100%;
+	max-width: 28rem;
+	background: var(--hk-color-surface);
+	color: var(--hk-color-text);
+	border-radius: var(--hk-radius-lg);
+	box-shadow: var(--hk-shadow-lg);
+	padding: var(--hk-space-5);
+}
+
+.hk-modal-panel--sm {
+	max-width: 20rem;
+}
+
+.hk-modal-panel--lg {
+	max-width: 40rem;
+}
+
+.hk-modal-close {
+	position: absolute;
+	top: var(--hk-space-3);
+	right: var(--hk-space-3);
+	width: var(--hk-space-6);
+	height: var(--hk-space-6);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: var(--hk-radius-sm);
+	background: transparent;
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-lg);
+	line-height: 1;
+	cursor: pointer;
+}
+
+.hk-modal-close:hover {
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-modal-title {
+	margin: 0 0 var(--hk-space-3);
+	font-size: var(--hk-font-size-lg);
+	padding-right: var(--hk-space-6);
+}
+
+.hk-modal-body {
+	margin-bottom: var(--hk-space-4);
+}
+
+.hk-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--hk-space-2);
+}
+
+/* ==========================================================================
+   Pagination
+   ========================================================================== */
+
+.hk-pagination {
+	display: inline-flex;
+	border-radius: var(--hk-radius-md);
+	overflow: hidden;
+	border: 1px solid var(--hk-color-border);
+}
+
+.hk-pagination-item {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: var(--hk-space-8);
+	padding: var(--hk-space-1) var(--hk-space-3);
+	border: none;
+	border-right: 1px solid var(--hk-color-border);
+	background: var(--hk-color-surface);
+	color: var(--hk-color-text);
+	font-size: var(--hk-font-size-sm);
+	cursor: pointer;
+}
+
+.hk-pagination-item:last-child {
+	border-right: none;
+}
+
+.hk-pagination-item:hover:not(:disabled) {
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-pagination-item:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.hk-pagination-item--active {
+	background: var(--hk-color-primary);
+	color: var(--hk-color-on-color);
+}
+
+.hk-pagination-ellipsis {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: var(--hk-space-8);
+	padding: var(--hk-space-1) var(--hk-space-2);
+	border-right: 1px solid var(--hk-color-border);
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-sm);
+}
+
+/* ==========================================================================
+   Toast
+   ========================================================================== */
+
+.hk-toast {
+	position: fixed;
+	bottom: var(--hk-space-5);
+	right: var(--hk-space-5);
+	z-index: var(--hk-z-toast);
+	display: flex;
+	align-items: flex-start;
+	gap: var(--hk-space-3);
+	width: 340px;
+	max-width: calc(100vw - var(--hk-space-6));
+	padding: var(--hk-space-3) var(--hk-space-4);
+	border-radius: var(--hk-radius-lg);
+	border-left: 4px solid var(--hk-color-neutral);
+	background: var(--hk-color-surface);
+	box-shadow: var(--hk-shadow-md);
+	opacity: 0;
+	transform: translateY(8px);
+	transition: opacity var(--hk-transition-base), transform var(--hk-transition-base);
+}
+
+.hk-toast--visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* Docs/preview embedding: lay out inline instead of pinned to the
+   viewport corner, so it can sit in a normal-flow container. */
+.hk-toast--static {
+	position: static;
+}
+
+.hk-toast-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 28px;
+	height: 28px;
+	border-radius: var(--hk-radius-full);
+	background: var(--hk-color-neutral);
+	color: var(--hk-color-on-color);
+}
+
+.hk-toast-icon svg {
+	width: 16px;
+	height: 16px;
+}
+
+.hk-toast-body {
+	flex: 1;
+	min-width: 0;
+}
+
+.hk-toast-title {
+	display: block;
+	font-weight: 600;
+	font-size: var(--hk-font-size-md);
+	color: var(--hk-color-text);
+}
+
+.hk-toast-message {
+	display: block;
+	margin-top: 2px;
+	font-size: var(--hk-font-size-sm);
+	color: var(--hk-color-text-muted);
+}
+
+.hk-toast-close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	border: none;
+	border-radius: var(--hk-radius-sm);
+	background: none;
+	color: var(--hk-color-text-muted);
+	cursor: pointer;
+}
+
+.hk-toast-close svg {
+	width: 14px;
+	height: 14px;
+}
+
+.hk-toast-close:hover {
+	background: var(--hk-color-surface-alt);
+	color: var(--hk-color-text);
+}
+
+.hk-toast--success {
+	border-left-color: var(--hk-color-success);
+}
+
+.hk-toast--success .hk-toast-icon {
+	background: var(--hk-color-success);
+}
+
+.hk-toast--error {
+	border-left-color: var(--hk-color-error);
+}
+
+.hk-toast--error .hk-toast-icon {
+	background: var(--hk-color-error);
+}
+
+.hk-toast--warning {
+	border-left-color: var(--hk-color-warning);
+}
+
+.hk-toast--warning .hk-toast-icon {
+	background: var(--hk-color-warning);
+}
+
+.hk-toast--info {
+	border-left-color: var(--hk-color-info);
+}
+
+.hk-toast--info .hk-toast-icon {
+	background: var(--hk-color-info);
+}

@@ -1,0 +1,53 @@
+/**
+ * Escape-hatch utility classes. Last in the load chain (see AssetManager)
+ * so they can win against component defaults for one-off overrides
+ * without reaching for inline styles or !important.
+ */
+
+.hk-u-hidden {
+	display: none !important;
+}
+
+.hk-u-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.hk-u-flex {
+	display: flex !important;
+}
+
+.hk-u-items-center {
+	align-items: center !important;
+}
+
+.hk-u-justify-between {
+	justify-content: space-between !important;
+}
+
+.hk-u-text-muted {
+	color: var(--hk-color-text-muted) !important;
+}
+
+.hk-u-text-center {
+	text-align: center !important;
+}
+
+.hk-u-mt-0 {
+	margin-top: 0 !important;
+}
+
+.hk-u-mb-0 {
+	margin-bottom: 0 !important;
+}
+
+.hk-u-full-width {
+	width: 100% !important;
+}

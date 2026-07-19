@@ -1,0 +1,105 @@
+/**
+ * Design tokens ONLY. No selectors targeting components live here —
+ * every other stylesheet in this chain consumes these custom properties
+ * instead of hardcoding a hex value or pixel size. This is what makes
+ * host-side re-theming possible via a single :root override.
+ */
+
+:root {
+	/* Color */
+	--hk-color-primary: #2563eb;
+	--hk-color-primary-hover: #1d4ed8;
+	--hk-color-secondary: #7c3aed;
+	--hk-color-secondary-hover: #6d28d9;
+	--hk-color-accent: #0d9488;
+	--hk-color-accent-hover: #0f766e;
+	--hk-color-neutral: #1f2937;
+	--hk-color-neutral-hover: #111827;
+	--hk-color-info: #0891b2;
+	--hk-color-info-hover: #0e7490;
+	--hk-color-success: #16a34a;
+	--hk-color-success-hover: #15803d;
+	--hk-color-warning: #d97706;
+	--hk-color-warning-hover: #b45309;
+	--hk-color-danger: #dc2626;
+	--hk-color-danger-hover: #b91c1c;
+	/* 'error' is the daisyUI-style semantic name for the same danger color. */
+	--hk-color-error: var(--hk-color-danger);
+	--hk-color-error-hover: var(--hk-color-danger-hover);
+
+	--hk-color-text: #1f2328;
+	--hk-color-text-muted: #59636e;
+	--hk-color-border: #d0d7de;
+	--hk-color-surface: #ffffff;
+	--hk-color-surface-alt: #f6f8fa;
+	--hk-color-bg: #ffffff;
+
+	/* Text/icon color on top of a saturated semantic color (buttons,
+	   badges, avatars, …) — fixed regardless of theme, since it's chosen
+	   against the semantic color itself, not the page background. */
+	--hk-color-on-color: #fff;
+
+	/* Spacing scale */
+	--hk-space-1: 4px;
+	--hk-space-2: 8px;
+	--hk-space-3: 12px;
+	--hk-space-4: 16px;
+	--hk-space-5: 24px;
+	--hk-space-6: 32px;
+	--hk-space-8: 48px;
+
+	/* Type */
+	--hk-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--hk-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--hk-font-size-xs: 11px;
+	--hk-font-size-sm: 13px;
+	--hk-font-size-md: 14px;
+	--hk-font-size-lg: 16px;
+	--hk-font-size-xl: 20px;
+	--hk-line-height: 1.5;
+
+	/* Radius */
+	--hk-radius-sm: 4px;
+	--hk-radius-md: 6px;
+	--hk-radius-lg: 10px;
+	--hk-radius-full: 9999px;
+
+	/* Shadow */
+	--hk-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+	--hk-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+	--hk-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+
+	/* Z-index scale */
+	--hk-z-dropdown: 100;
+	--hk-z-sticky: 200;
+	--hk-z-modal-backdrop: 900;
+	--hk-z-modal: 1000;
+	--hk-z-toast: 1100;
+
+	/* Motion */
+	--hk-transition-fast: 120ms ease;
+	--hk-transition-base: 200ms ease;
+}
+
+/* Dark theme: opt-in via data-theme, or automatic via prefers-color-scheme
+   when the host has not forced a theme. Kept to the same token names so
+   nothing outside this file needs to know which theme is active. */
+@media (prefers-color-scheme: dark) {
+	:root:not([data-hk-theme="light"]) {
+		--hk-color-text: #e6edf3;
+		--hk-color-text-muted: #9198a1;
+		--hk-color-border: #30363d;
+		--hk-color-surface: #161b22;
+		--hk-color-surface-alt: #0d1117;
+		--hk-color-bg: #0d1117;
+	}
+}
+
+:root[data-hk-theme="dark"] {
+	--hk-color-text: #e6edf3;
+	--hk-color-text-muted: #9198a1;
+	--hk-color-border: #30363d;
+	--hk-color-surface: #161b22;
+	--hk-color-surface-alt: #0d1117;
+	--hk-color-bg: #0d1117;
+}

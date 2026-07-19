@@ -1,0 +1,367 @@
+/**
+ * Showcase-only chrome, layered on top of the shared design system (see
+ * Showcase.php::enqueue() — this depends on the public 'hukkoo-components'
+ * handle so variables/base/layout/components/utilities load first).
+ */
+
+.hk-showcase-page {
+	padding: var(--hk-space-5);
+
+	/* Pin light-theme tokens for the showcase regardless of the host's
+	   dark-mode preference — this is an admin documentation tool, not
+	   themed product UI, and shouldn't go black just because the OS is
+	   in dark mode. */
+	--hk-color-text: #1f2328;
+	--hk-color-text-muted: #59636e;
+	--hk-color-border: #d0d7de;
+	--hk-color-surface: #ffffff;
+	--hk-color-surface-alt: #f6f8fa;
+	--hk-color-bg: #ffffff;
+}
+
+.hk-showcase-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--hk-space-4);
+	padding-bottom: var(--hk-space-5);
+	margin-bottom: var(--hk-space-5);
+	border-bottom: 1px solid var(--hk-color-border);
+}
+
+.hk-showcase-header-title h1 {
+	margin: 0;
+	font-size: var(--hk-font-size-xl);
+	color: var(--hk-color-text);
+}
+
+.hk-showcase-header-title p {
+	margin: var(--hk-space-1) 0 0;
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-showcase-version {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	padding: var(--hk-space-1) var(--hk-space-3);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-full);
+	background: var(--hk-color-surface-alt);
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-xs);
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.hk-showcase-layout {
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	gap: var(--hk-space-6);
+	align-items: start;
+}
+
+.hk-showcase-nav {
+	display: flex;
+	flex-direction: column;
+	gap: var(--hk-space-4);
+	position: sticky;
+	top: var(--hk-space-4);
+}
+
+/* WP admin's own responsive menu collapses at this width (782px) — match
+   it so the showcase's chrome shifts to a mobile layout at the same
+   point the rest of wp-admin does, rather than on its own schedule. A
+   fixed 220px sidebar column below that width leaves too little room
+   for the content column, so this stacks nav above content instead. */
+@media (max-width: 782px) {
+	.hk-showcase-layout {
+		grid-template-columns: 1fr;
+	}
+
+	.hk-showcase-nav {
+		position: static;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: var(--hk-space-2);
+	}
+
+	.hk-showcase-nav-group {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--hk-space-2);
+	}
+
+	.hk-showcase-nav-group-label {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+.hk-showcase-nav-group {
+	display: flex;
+	flex-direction: column;
+	gap: var(--hk-space-1);
+}
+
+.hk-showcase-nav-group-label {
+	display: block;
+	margin: 0 0 var(--hk-space-1);
+	padding: 0 var(--hk-space-3);
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-xs);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.hk-showcase-nav-group-label:hover {
+	color: var(--hk-color-text);
+	text-decoration: none;
+}
+
+.hk-showcase-nav-link {
+	padding: var(--hk-space-2) var(--hk-space-3);
+	border-radius: var(--hk-radius-md);
+	color: var(--hk-color-text);
+	font-size: var(--hk-font-size-sm);
+}
+
+.hk-showcase-nav-link:hover {
+	background: var(--hk-color-surface-alt);
+	text-decoration: none;
+}
+
+.hk-showcase-nav-link.hk-showcase-nav-link--active {
+	background: var(--hk-color-primary);
+	color: var(--hk-color-on-color);
+	font-weight: 600;
+}
+
+.hk-gallery-section {
+	margin-bottom: var(--hk-space-6);
+	scroll-margin-top: var(--hk-space-4);
+}
+
+.hk-gallery-section-heading {
+	margin: 0 0 var(--hk-space-3);
+}
+
+.hk-gallery-section-anchor {
+	color: var(--hk-color-text);
+}
+
+.hk-gallery-section-anchor::before {
+	content: "#";
+	display: inline-block;
+	width: var(--hk-space-4);
+	color: var(--hk-color-text-muted);
+	opacity: 0;
+}
+
+.hk-gallery-section-heading:hover .hk-gallery-section-anchor::before {
+	opacity: 1;
+}
+
+.hk-gallery-section-anchor:hover {
+	text-decoration: none;
+}
+
+/* One live-preview row per section — every variant shown together
+   (daisyUI-style), instead of one card per variant. */
+.hk-gallery-preview-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--hk-space-4);
+	padding: var(--hk-space-5);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-lg);
+	background: var(--hk-color-surface);
+	margin-bottom: var(--hk-space-3);
+}
+
+.hk-gallery-preview-item {
+	display: flex;
+	align-items: center;
+}
+
+/* The Table gallery's two full CRUD demos (Team members, Products) are
+   hand-built HTML strings rather than GallerySection::render() output, so
+   their preview row needs to lay out top-to-bottom like a real page instead
+   of the default flex-wrap "many small items side by side" row. Must come
+   after .hk-gallery-preview-row above — same specificity, this needs to
+   win the cascade. */
+.hk-gallery-preview-row--block {
+	display: block;
+	padding: var(--hk-space-5);
+}
+
+.hk-demo-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--hk-space-3);
+	margin-bottom: var(--hk-space-4);
+}
+
+.hk-demo-toolbar-search {
+	min-width: 16rem;
+}
+
+.hk-demo-toolbar-filter {
+	min-width: 10rem;
+}
+
+.hk-demo-toolbar-spacer {
+	flex: 1;
+}
+
+.hk-demo-footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--hk-space-2);
+	margin-top: var(--hk-space-3);
+}
+
+.hk-demo-range-label {
+	margin: 0;
+}
+
+.hk-demo-cell-media {
+	display: flex;
+	align-items: center;
+	gap: var(--hk-space-3);
+}
+
+.hk-demo-cell-strong {
+	font-weight: 500;
+}
+
+.hk-demo-actions {
+	display: flex;
+	gap: var(--hk-space-1);
+}
+
+/* Visual aid for the Container gallery so the width difference between
+   variants is visible in the preview row — not part of Container's own
+   CSS, which stays a plain invisible wrapper. */
+.hk-gallery-container-demo {
+	border: 1px dashed var(--hk-color-border);
+	padding: var(--hk-space-2);
+	background: var(--hk-color-surface-alt);
+}
+
+.hk-gallery-code-toggle {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-md);
+	padding: var(--hk-space-1) var(--hk-space-3);
+	font-size: var(--hk-font-size-sm);
+	background: var(--hk-color-surface-alt);
+	color: var(--hk-color-text);
+	cursor: pointer;
+}
+
+.hk-gallery-code-toggle:hover {
+	background: var(--hk-color-border);
+}
+
+.hk-code-block {
+	margin: var(--hk-space-2) 0 0;
+	padding: var(--hk-space-3);
+	background: var(--hk-color-surface-alt);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-md);
+	font-size: var(--hk-font-size-sm);
+	line-height: 1.6;
+	overflow-x: auto;
+}
+
+/* WP admin's core CSS gives bare <code> a background + padding; since
+   ours wraps multi-line content inline, that paints a separate box per
+   visual line. The <pre> already supplies background/padding, so strip
+   WP's here rather than let it fight our own block-level styling. */
+.hk-code-block code {
+	background: none;
+	padding: 0;
+	margin: 0;
+}
+
+.hk-code-token--string {
+	color: var(--hk-color-success);
+}
+
+.hk-code-token--keyword {
+	color: var(--hk-color-secondary);
+	font-weight: 600;
+}
+
+.hk-code-token--class {
+	color: var(--hk-color-primary);
+}
+
+.hk-code-token--call {
+	color: var(--hk-color-warning);
+}
+
+.hk-code-token--arrow {
+	color: var(--hk-color-text-muted);
+}
+
+/* ==========================================================================
+   Homepage
+   ========================================================================== */
+
+.hk-showcase-home-intro h2 {
+	margin: 0 0 var(--hk-space-2);
+	color: var(--hk-color-text);
+}
+
+.hk-showcase-home-intro p {
+	margin: 0;
+	max-width: 640px;
+	color: var(--hk-color-text-muted);
+}
+
+.hk-showcase-home-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: var(--hk-space-4);
+	margin-top: var(--hk-space-6);
+}
+
+.hk-showcase-home-card {
+	display: block;
+	padding: var(--hk-space-4);
+	border: 1px solid var(--hk-color-border);
+	border-radius: var(--hk-radius-lg);
+	background: var(--hk-color-surface);
+	color: inherit;
+	text-decoration: none;
+	transition: border-color var(--hk-transition-fast), box-shadow var(--hk-transition-fast);
+}
+
+.hk-showcase-home-card:hover {
+	border-color: var(--hk-color-primary);
+	box-shadow: var(--hk-shadow-sm);
+	text-decoration: none;
+}
+
+.hk-showcase-home-card h3 {
+	margin: 0 0 var(--hk-space-1);
+	color: var(--hk-color-text);
+	font-size: var(--hk-font-size-md);
+}
+
+.hk-showcase-home-card p {
+	margin: 0;
+	color: var(--hk-color-text-muted);
+	font-size: var(--hk-font-size-sm);
+}
